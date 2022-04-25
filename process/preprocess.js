@@ -159,10 +159,6 @@ function readXLS(){
                     })
                 })
             }
-            
-        
-            
-            // console.log(cpcItems[0][0])
         })
         
     })
@@ -222,18 +218,7 @@ function readXLS(){
 //     // console.log("3.setNumberLowerClassOfTree")
 //     // console.log("4.rootNode:", rootNode)
     
-    
-//     // setTimeout(function(){
-//     //     structDataTree(cpcItems)
-//     // }, 4000)
 
-//     // setTimeout(function(){
-//     //     setNumberLowerClassOfTree(rootNode);
-//     // }, 5000)
-
-//     // setTimeout(function(){
-//     //     console.log(rootNode)
-//     // }, 6000)
     
     
 // }

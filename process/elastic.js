@@ -126,7 +126,7 @@ let deleteDocument = (index, id) => {
 }
 
 //도큐먼트 생성, 삽입
-let createDocument = async (index, id, body) => { 
+let createDocument = (index, id, body) => { 
 
     return client.index({
         index: index,

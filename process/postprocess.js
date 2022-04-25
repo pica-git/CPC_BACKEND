@@ -6,45 +6,6 @@ var resultArray = []
 var cateArray = [0,0,0,0,0,0,0,0,0,0]
 
 
-
-/** 괄호 안의 내용 제외 및 낱말만을 검색 */
-async function searchData(sentence, query) { 
-    
-    const sentenceArr = sentence.split("")
-    const queryLength  = query.toString().length
-    let isBlocked = false
-    
-    
-    for (const [idx, chr] of sentenceArr.entries()){
-        
-        if(isBlocked) 
-            continue
-        
-        if(chr == '(') isBlocked = true
-        else if(chr == ')') isBlocked = false
-        
-        if((sentence[idx-1] == ' ' || idx == 0) && (sentence[idx+queryLength] == ' ' || idx+queryLength == sentenceArr.length)){
-            
-            if(sentence[idx] == query[0]){
-                let word_num = 1
-                let query_idx = 1
-                for(i = idx+1; i < idx+queryLength; i++)
-                {
-                    if(sentence[i] != query[query_idx]) break
-
-                    query_idx++
-                    word_num++
-                }
-
-                if(word_num == queryLength) {
-                    return true 
-                }
-            }
-        }
-    }
-    return false
-}
-
 function categoryNumCalculation(chr){
     if(chr == 'A')
         cateArray[0] += 1

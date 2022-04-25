@@ -1,4 +1,3 @@
-let elasticsearch = require('elasticsearch')
 let elastic = require('./elastic')
 
 // let client = new elasticsearch.Client({
@@ -21,59 +20,55 @@ let elastic = require('./elastic')
 let fs = require("fs")
 const xlsx = require( "xlsx" );
 
-
-let readXLSX = async () => {
+let indexing = async () => {
     let id = 0
-    fs.readdir(process.cwd()+"/public/CPC", async (error, fileList) => {
-        await fileList.forEach(async (cpc_file) => {
-            try{
-                let data = await xlsx.readFile(process.cwd()+"/public/CPC/"+ cpc_file)
-                let sheetName = await data.SheetNames[0]         // @details 첫번째 시트 정보 추출
-                let firstSheet = await data.Sheets[sheetName]       // @details 시트의 제목 추출
+    let bodyItem = new Map()
+   
+    try{
+        fs.readdir(process.cwd()+"/public/CPC", async (error, fileList) => {
+            await fileList.forEach(async (cpc_file) => {
+
+                let data = xlsx.readFile(process.cwd()+"/public/CPC/"+ cpc_file)
+                let sheetName = data.SheetNames[0]         // @details 첫번째 시트 정보 추출
+                let firstSheet = data.Sheets[sheetName]       // @details 시트의 제목 추출
                 let jsonData = xlsx.utils.sheet_to_json(firstSheet, { defval : "" })
                 
-                for await (let instance of jsonData)
+                for (let instance of jsonData)
                 {
-                    
                     if(instance['코드'] == '')
                         continue
                     
                     let body = {
+                        id: id,
                         code: instance['코드'],
                         description: instance['원문']
                     }
                     
-                    await elastic.createDocument('cpc', id++, body)
-                    console.log(body.code)
-                }
-
-            } catch(err){
-                console.log(err)
+                    bodyItem.set(id++, body)
+                }   
+            })
+           
+            for (let item of bodyItem){
+                await elastic.createDocument('cpc', item[0], item[1])
+                // console.log(item[0], item[1])
             }
-
-            
             
             
         })
         
-    })
+    } catch(err){
+        console.log(err)
+    } 
+
+        
     
 }
 
-
-
-readXLSX()
+indexing()
 
 
 // async function run () {
-    
-  
 
-
-  
-
-  
-  
 // }
 
 // run().catch(console.log)
